@@ -1,16 +1,24 @@
-student_count = 11
+# constructing directory list
+students = [
+  "Dr. Hannibal Lecter",
+  "Darth Vader",
+  "Nurse Ratched",
+  "Michael Corleone",
+  "Alex DeLarge",
+  "The Wicked Witch of the West",
+  "Terminator",
+  "Freddy Krueger",
+  "The Joker",
+  "Joffrey Baratheon",
+  "Norman Bates",
+] 
+
+# puts the array
 puts "The students of the Villains Academy"
 puts "-----------------"
-puts "Dr. Hannibal Lecter"
-puts "Darth Vader"
-puts "Nurse Ratched"
-puts "Michael Corleone"
-puts "Alex DeLarge"
-puts "The Wicked Witch of the West"
-puts "Terminator"
-puts "Freddy Krueger"
-puts "The Joker"
-puts "Joffrey Baratheon"
-puts "Norman Bates"
-#puts the total number of students
-puts "Overall, we have #{student_count} great students"
+students.each do |student|
+  puts student
+end
+
+# puts the total number of students
+puts "Overall, we have #{students.count} great students"
