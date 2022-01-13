@@ -38,9 +38,9 @@ def input_students
         end
       end
     end
-    puts students[counter]
     # count the students to avoid additional loops
     counter += 1
+    puts "Enter another name or press Return to complete"
     name = gets.chomp
   end
 
@@ -53,19 +53,24 @@ def print_header
 end
 
 def print(students)
-  idx = 0
-  until idx == students.length
-    student = students[idx]
-    if student[:name][0] == "J" && student[:name].length <= 12
-      puts "#{idx + 1}. " + "#{student[:name]}".center(12) + " (#{student[:cohort]} cohort)"
-      puts "------------------------------------"
-      puts "    DOB: " + "#{student[:dob]}".center(12)
-      puts " Height: " + "#{student[:height]}".center(12)
-      puts "Hobbies: " + "#{student[:hobbies]}".center(12)
-      puts "------------------------------------"
+  cohorts = students.map { |student| student[:cohort] }.uniq
+  cohorts.each do |cohort|
+    puts "Cohort #{cohort}"
+    puts "------------------------------------"
+    students.each_with_index do |student, idx|
+      if student[:cohort] == cohort
+        puts "#{idx + 1}. " + "#{student[:name]}".center(12) + " (#{student[:cohort]} cohort)"
+        puts "------------------------------------"
+        puts "    DOB: " + "#{student[:dob]}".center(12)
+        puts " Height: " + "#{student[:height]}".center(12)
+        puts "Hobbies: " + "#{student[:hobbies]}".center(12)
+        puts "------------------------------------"
+      end
+
     end
-    idx +=1
+
   end
+
 end
 
 def print_footer(students)
