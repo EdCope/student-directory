@@ -15,7 +15,8 @@ def input_students
   counter = 0
   while !name.empty? do
     students << {name: name, dob: "value", height: "value", hobbies: "value"}
-    puts "Now we have #{students.count} students"
+    plural = "Now we have #{students.count} student"
+    puts students.count == 1 ? plural : (plural + "s")
     puts "Assign student to a cohort (If empty will be assigned to the current cohort)"
 
     # Handle Assignment of cohort
@@ -74,7 +75,8 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+  plural = "Overall, we have #{students.count} great student"
+  puts students.count == 1 ? plural : (plural + "s")
 end
 
 students = input_students
