@@ -37,7 +37,9 @@ def input_students
           puts "Try again - not a valid Cohort"
           cohort = gets.gsub("\n", "")
         end
+
       end
+
     end
     # count the students to avoid additional loops
     counter += 1
@@ -54,6 +56,10 @@ def print_header
 end
 
 def print(students)
+  if students.count < 1
+    puts "There are no students enrolled at the Villains Academy"
+    return
+  end
   cohorts = students.map { |student| student[:cohort] }.uniq
   cohorts.each do |cohort|
     puts "Cohort #{cohort}"
@@ -75,8 +81,10 @@ def print(students)
 end
 
 def print_footer(students)
-  plural = "Overall, we have #{students.count} great student"
-  puts students.count == 1 ? plural : (plural + "s")
+  if students.count > 1
+    plural = "Overall, we have #{students.count} great student"
+    puts students.count == 1 ? plural : (plural + "s")
+  end
 end
 
 students = input_students
