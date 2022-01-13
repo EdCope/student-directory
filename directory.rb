@@ -4,7 +4,7 @@ def input_students
   puts "Please enter the names of new students"
   puts "To finish, press return twice"
 
-  name = gets.chomp
+  name = gets.gsub("\n", "")
   months = [
       "January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October",
@@ -20,7 +20,7 @@ def input_students
     puts "Assign student to a cohort (If empty will be assigned to the current cohort)"
 
     # Handle Assignment of cohort
-    cohort = gets.chomp
+    cohort = gets.gsub("\n", "")
     while true do
       if cohort.empty?
         cohort = months[0] # current month
@@ -35,14 +35,14 @@ def input_students
           break
         else
           puts "Try again - not a valid Cohort"
-          cohort = gets.chomp
+          cohort = gets.gsub("\n", "")
         end
       end
     end
     # count the students to avoid additional loops
     counter += 1
     puts "Enter another name or press Return to complete"
-    name = gets.chomp
+    name = gets.gsub("\n", "")
   end
 
   students
