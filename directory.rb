@@ -4,7 +4,7 @@ def input_students
   puts "Please enter the names of new students"
   puts "To finish, press return twice"
 
-  name = gets.gsub("\n", "")
+  name = STDIN.gets.gsub("\n", "")
   months = [
       "January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October",
@@ -20,7 +20,7 @@ def input_students
     puts "Assign student to a cohort (If empty will be assigned to the current cohort)"
 
     # Handle Assignment of cohort
-    cohort = gets.gsub("\n", "")
+    cohort = STDIN.gets.gsub("\n", "")
     while true do
       if cohort.empty?
         cohort = months[0] # current month
@@ -35,7 +35,7 @@ def input_students
           break
         else
           puts "Try again - not a valid Cohort"
-          cohort = gets.gsub("\n", "")
+          cohort = STDIN.gets.gsub("\n", "")
         end
 
       end
@@ -44,7 +44,7 @@ def input_students
     # count the students to avoid additional loops
     counter += 1
     puts "Enter another name or press Return to complete"
-    name = gets.gsub("\n", "")
+    name = STDIN.gets.gsub("\n", "")
   end
 
 end
@@ -105,13 +105,25 @@ def save_students
 
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, dob, height, hobbies = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym, dob: dob, height: height, hobbies: hobbies}
   end
   file.close
+
+end
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+  end
 
 end
 
@@ -142,9 +154,10 @@ def print_menu
 end
 
 def interactive_menu
+  try_load_students
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
 
   end
 
