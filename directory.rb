@@ -96,7 +96,7 @@ end
 
 def show_students
   print_header
-  print_students_list
+  print_body
   print_footer
 end
 
@@ -141,9 +141,13 @@ def menu_choice(selection)
   when "2"
     show_students
   when "3"
-    save_students
+    puts "Where would you like to save the list to? (Default: students.csv)"
+    input = STDIN.gets.chomp
+    save_students(input.empty? ? filename : input)
   when "4"
-    load_students
+    puts "Which list would you like to load? (Default: students.csv)"
+    input = STDIN.gets.chomp
+    load_students(input.empty? ? filename : input)
   when "9"
     puts "Goodbye!"
     exit
@@ -156,8 +160,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to csv"
+  puts "4. Load the list from csv"
   puts "9. Exit"
 end
 
