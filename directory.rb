@@ -59,12 +59,15 @@ def print_header
   puts "------------------------------------"
 end
 
-def print_students_list
+def print_body
   if @students.count < 1
     puts "There are no students enrolled at the Villains Academy"
     return
   end
-  cohorts = @students.map { |student| student[:cohort] }.uniq
+  print_student_elements(@students.map { |student| student[:cohort] }.uniq)
+end
+
+def print_student_elements(cohorts)
   cohorts.each do |cohort|
     puts "Cohort #{cohort}"
     puts "------------------------------------"
