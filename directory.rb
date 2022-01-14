@@ -100,8 +100,8 @@ def show_students
   print_footer
 end
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename = "students.csv")
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort],
      student[:dob], student[:height], student[:hobbies]]
@@ -109,6 +109,7 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "Saved the student list to #{filename}"
 
 end
 
@@ -119,7 +120,7 @@ def load_students(filename = "students.csv")
     add_student(name, cohort.to_sym, dob, height, hobbies)
   end
   file.close
-
+  puts "Loaded #{@students.count} students from #{filename}"
 end
 
 def try_load_students
@@ -127,7 +128,6 @@ def try_load_students
   return load_students if filename.nil?
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
   end
@@ -145,6 +145,7 @@ def menu_choice(selection)
   when "4"
     load_students
   when "9"
+    puts "Goodbye!"
     exit
   else
     puts "I don't know what you meant, try again"
