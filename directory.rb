@@ -1,6 +1,6 @@
-def input_students
-  students = []
+@students = [] # an empty array accessible by all methods
 
+def input_students
   puts "Please enter the names of new students"
   puts "To finish, press return twice"
 
@@ -14,9 +14,9 @@ def input_students
   # waits until name variable is empty to trigger double return exit
   counter = 0
   while !name.empty? do
-    students << {name: name, dob: "value", height: "value", hobbies: "value"}
-    plural = "Now we have #{students.count} student"
-    puts students.count == 1 ? plural : (plural + "s")
+    @students << {name: name, dob: "value", height: "value", hobbies: "value"}
+    plural = "Now we have #{@students.count} student"
+    puts @students.count == 1 ? plural : (plural + "s")
     puts "Assign student to a cohort (If empty will be assigned to the current cohort)"
 
     # Handle Assignment of cohort
@@ -25,13 +25,13 @@ def input_students
       if cohort.empty?
         cohort = months[0] # current month
         puts "Assigned to #{months[0]} cohort."
-        students[counter][:cohort] = cohort.to_sym
+        @students[counter][:cohort] = cohort.to_sym
         break
       else
         cohort.capitalize!
         if months.include?(cohort)
           puts "Assigned to #{cohort} cohort."
-          students[counter][:cohort] = cohort.to_sym
+          @students[counter][:cohort] = cohort.to_sym
           break
         else
           puts "Try again - not a valid Cohort"
@@ -47,7 +47,6 @@ def input_students
     name = gets.gsub("\n", "")
   end
 
-  students
 end
 
 def print_header
@@ -55,16 +54,16 @@ def print_header
   puts "------------------------------------"
 end
 
-def print(students)
-  if students.count < 1
+def print_students_list
+  if @students.count < 1
     puts "There are no students enrolled at the Villains Academy"
     return
   end
-  cohorts = students.map { |student| student[:cohort] }.uniq
+  cohorts = @students.map { |student| student[:cohort] }.uniq
   cohorts.each do |cohort|
     puts "Cohort #{cohort}"
     puts "------------------------------------"
-    students.each_with_index do |student, idx|
+    @students.each_with_index do |student, idx|
       if student[:cohort] == cohort
         puts "#{idx + 1}. " + "#{student[:name]}".center(12) + " (#{student[:cohort]} cohort)"
         puts "------------------------------------"
@@ -80,34 +79,43 @@ def print(students)
 
 end
 
-def print_footer(students)
-  if students.count > 1
-    plural = "Overall, we have #{students.count} great student"
-    puts students.count == 1 ? plural : (plural + "s")
+def print_footer
+  if @students.count > 1
+    plural = "Overall, we have #{@students.count} great student"
+    puts @students.count == 1 ? plural : (plural + "s")
   end
 
 end
 
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "9"
+    exit
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
 def interactive_menu
-  students = []
   loop do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    selection = gets.chomp
-    
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print(students)
-      print_footer(students)
-    when "9"
-      exit
-    else
-      puts "I don't know what you meant, try again"
-    end
+    print_menu
+    process(gets.chomp)
 
   end
 
