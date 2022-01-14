@@ -9,8 +9,7 @@ def input_students
   # waits until name variable is empty to trigger double return exit
   while !name.empty? do
     add_student(name, input_cohort)
-    plural = "Now we have #{@students.count} student"
-    puts @students.count == 1 ? plural : (plural + "s")
+    puts plural?("Now we have #{@students.count} student")
     puts "Enter another name or press Return to complete"
     name = STDIN.gets.gsub("\n", "")
   end
@@ -51,6 +50,10 @@ def add_student(name = "value", cohort = "value", dob = "value", height = "value
   @students << {name: name, cohort: cohort, dob: dob, height: height, hobbies: hobbies}
 end
 
+def plural?(string)
+  @students.count == 1 ? string : (string + "s")
+end
+
 def print_header
   puts "The students of the Villains Academy"
   puts "------------------------------------"
@@ -83,8 +86,7 @@ end
 
 def print_footer
   if @students.count > 1
-    plural = "Overall, we have #{@students.count} great student"
-    puts @students.count == 1 ? plural : (plural + "s")
+    puts plural?("Overall, we have #{@students.count} great student")
   end
 
 end
@@ -129,7 +131,7 @@ def try_load_students
 
 end
 
-def process(selection)
+def menu_choice(selection)
   case selection
   when "1"
     input_students
@@ -159,7 +161,7 @@ def interactive_menu
   try_load_students
   loop do
     print_menu
-    process(STDIN.gets.chomp)
+    menu_choice(STDIN.gets.chomp)
 
   end
 
