@@ -5,48 +5,50 @@ def input_students
   puts "To finish, press return twice"
 
   name = STDIN.gets.gsub("\n", "")
+  
+  # waits until name variable is empty to trigger double return exit
+  while !name.empty? do
+    add_student(name, input_cohort)
+    plural = "Now we have #{@students.count} student"
+    puts @students.count == 1 ? plural : (plural + "s")
+    puts "Enter another name or press Return to complete"
+    name = STDIN.gets.gsub("\n", "")
+  end
+
+end
+
+def input_cohort
   months = [
       "January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October",
       "November", "December"
     ]
 
-  # waits until name variable is empty to trigger double return exit
-  counter = 0
-  while !name.empty? do
-    @students << {name: name, dob: "value", height: "value", hobbies: "value"}
-    plural = "Now we have #{@students.count} student"
-    puts @students.count == 1 ? plural : (plural + "s")
-    puts "Assign student to a cohort (If empty will be assigned to the current cohort)"
-
-    # Handle Assignment of cohort
-    cohort = STDIN.gets.gsub("\n", "")
-    while true do
-      if cohort.empty?
-        cohort = months[0] # current month
-        puts "Assigned to #{months[0]} cohort."
-        @students[counter][:cohort] = cohort.to_sym
-        break
+  puts "Assign student to a cohort (If empty will be assigned to the current cohort)"
+  cohort = STDIN.gets.gsub("\n", "")
+  while true do
+    if cohort.empty?
+      cohort = months[0] # current month
+      puts "Assigned to #{months[0]} cohort."
+      return cohort.to_sym
+    else
+      cohort.capitalize!
+      if months.include?(cohort)
+        puts "Assigned to #{cohort} cohort."
+        return cohort.to_sym
       else
-        cohort.capitalize!
-        if months.include?(cohort)
-          puts "Assigned to #{cohort} cohort."
-          @students[counter][:cohort] = cohort.to_sym
-          break
-        else
-          puts "Try again - not a valid Cohort"
-          cohort = STDIN.gets.gsub("\n", "")
-        end
-
+        puts "Try again - not a valid Cohort"
+        cohort = STDIN.gets.gsub("\n", "")
       end
 
     end
-    # count the students to avoid additional loops
-    counter += 1
-    puts "Enter another name or press Return to complete"
-    name = STDIN.gets.gsub("\n", "")
+
   end
 
+end
+
+def add_student(name = "value", cohort = "value", dob = "value", height = "value", hobbies = "value")
+  @students << {name: name, cohort: cohort, dob: dob, height: height, hobbies: hobbies}
 end
 
 def print_header
@@ -109,7 +111,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, dob, height, hobbies = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym, dob: dob, height: height, hobbies: hobbies}
+    add_student(name, cohort.to_sym, dob, height, hobbies)
   end
   file.close
 
