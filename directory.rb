@@ -101,32 +101,33 @@ def show_students
 end
 
 def save_students(filename = "students.csv")
-  file = File.open(filename, "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort],
-     student[:dob], student[:height], student[:hobbies]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  File.open(filename, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort],
+      student[:dob], student[:height], student[:hobbies]]
+      csv_line = student_data.join(",") + "\n"
+      file << csv_line
+    end
+    puts "Saved the student list to #{filename}"
   end
-  file.close
-  puts "Saved the student list to #{filename}"
 
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, dob, height, hobbies = line.chomp.split(",")
-    add_student(name, cohort.to_sym, dob, height, hobbies)
+  File.open(filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort, dob, height, hobbies = line.chomp.split(",")
+      add_student(name, cohort.to_sym, dob, height, hobbies)
+    end
+    puts "Loaded #{@students.count} students from #{filename}"
   end
-  file.close
-  puts "Loaded #{@students.count} students from #{filename}"
+  
 end
 
 def try_load_students
   filename = ARGV.first
   return load_students if filename.nil?
-  if File.exists?(filename)
+  if File.exist?(filename)
     load_students(filename)
   else
     puts "Sorry, #{filename} doesn't exist."
@@ -143,11 +144,11 @@ def menu_choice(selection)
   when "3"
     puts "Where would you like to save the list to? (Default: students.csv)"
     input = STDIN.gets.chomp
-    save_students(input.empty? ? filename : input)
+    save_students(input.empty? ? "students.csv" : input)
   when "4"
     puts "Which list would you like to load? (Default: students.csv)"
     input = STDIN.gets.chomp
-    load_students(input.empty? ? filename : input)
+    load_students(input.empty? ? "students.csv" : input)
   when "9"
     puts "Goodbye!"
     exit
