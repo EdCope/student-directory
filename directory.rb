@@ -1,3 +1,5 @@
+require "csv"
+
 @students = [] # an empty array accessible by all methods
 
 def input_students
@@ -101,12 +103,10 @@ def show_students
 end
 
 def save_students(filename = "students.csv")
-  File.open(filename, "w") do |file|
+  CSV.open(filename, "w") do |csv|
     @students.each do |student|
-      student_data = [student[:name], student[:cohort],
+      csv << [student[:name], student[:cohort],
       student[:dob], student[:height], student[:hobbies]]
-      csv_line = student_data.join(",") + "\n"
-      file << csv_line
     end
     puts "Saved the student list to #{filename}"
   end
@@ -114,14 +114,11 @@ def save_students(filename = "students.csv")
 end
 
 def load_students(filename = "students.csv")
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort, dob, height, hobbies = line.chomp.split(",")
-      add_student(name, cohort.to_sym, dob, height, hobbies)
-    end
-    puts "Loaded #{@students.count} students from #{filename}"
+  CSV.foreach(filename, "r") do |row|
+    name, cohort, dob, height, hobbies = row
+    add_student(name, cohort.to_sym, dob, height, hobbies)
   end
-  
+  puts "Loaded #{@students.count} students from #{filename}"
 end
 
 def try_load_students
